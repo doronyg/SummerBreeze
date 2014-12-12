@@ -172,6 +172,9 @@ public class DrawerActivity extends Activity {
             case 0:
                 fragment = new ChallengeOneFragment();
                 break;
+            case 1:
+                fragment = new ChallengeTwoFragment();
+                break;
             default:
                 fragment = new EmptyChallengeFragment();
                 break;
