@@ -5,17 +5,15 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.yakovlev_golani.summerbreeze.R;
+import com.example.yakovlev_golani.summerbreeze.models.currentweather.CurrentWeather;
+import com.google.gson.Gson;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -48,13 +46,13 @@ public class ChallengeTwoFragment extends Fragment{
             public void onClick(View v) {
                 String locationString = mLocationName.getText().toString();
                 if (!locationString.isEmpty()) {
-                    new AsyncTask<String, String, String>(){
+                    new AsyncTask<String, String, CurrentWeather>(){
 
                         @Override
-                        protected String doInBackground(String... location) {
+                        protected CurrentWeather doInBackground(String... location) {
                             HttpClient httpclient = new DefaultHttpClient();
                             HttpResponse response;
-                            String responseString = null;
+                            CurrentWeather currentWeather = null;
                             try {
                                 final String CURRENT_WEATHER_PREFIX = "http://api.openweathermap.org/data/2.5/weather?q=";
                                 String url = CURRENT_WEATHER_PREFIX + location[0];
@@ -64,28 +62,29 @@ public class ChallengeTwoFragment extends Fragment{
                                     ByteArrayOutputStream out = new ByteArrayOutputStream();
                                     response.getEntity().writeTo(out);
                                     out.close();
-                                    responseString = out.toString();
+                                    currentWeather = parseCurrentWeather(out.toString());
                                 } else{
-                                    //Closes the connection.
                                     response.getEntity().getContent().close();
                                     throw new IOException(statusLine.getReasonPhrase());
                                 }
                             } catch (ClientProtocolException e) {
-                                Toast.makeText(getActivity(), "Could not fetch data - ClientProtocolException" + e.getMessage(), Toast.LENGTH_LONG);
+                                //Toast.makeText(getActivity(), "Could not fetch data - ClientProtocolException" + e.getMessage(), Toast.LENGTH_LONG);
                             } catch (IOException e) {
-                                Toast.makeText(getActivity(), "Could not fetch data - IOException "  + e.getMessage(), Toast.LENGTH_LONG);
+                                //Toast.makeText(getActivity(), "Could not fetch data - IOException "  + e.getMessage(), Toast.LENGTH_LONG);
                             }
-                            return responseString;
+                            return currentWeather;
                         }
 
                         @Override
-                        protected void onPostExecute(final String s) {
-                            super.onPostExecute(s);
+                        protected void onPostExecute(final CurrentWeather currentWeather) {
+                            super.onPostExecute(currentWeather);
                             new Handler(Looper.getMainLooper()).post(new Runnable() {
                                 @Override
                                 public void run() {
                                     // Code here will run in UI thread
-                                    Toast.makeText(getActivity(), s, Toast.LENGTH_LONG).show();
+                                    Toast.makeText(getActivity(), "Current temp in " +
+                                            currentWeather.getCoord().getLat() + "," + currentWeather.getCoord().getLon()
+                                            + " is " + currentWeather.getMain().getTemp(), Toast.LENGTH_LONG).show();
                                 }
                             });
 
@@ -97,4 +96,15 @@ public class ChallengeTwoFragment extends Fragment{
 
         return rootView;
     }
+
+    private static CurrentWeather parseCurrentWeather(String response) {
+        Gson g = new Gson();
+        try {
+            return g.fromJson(response, CurrentWeather.class);
+        } catch (Throwable throwable){
+            throwable.printStackTrace();
+        }
+        return null;
+
+}
 }
