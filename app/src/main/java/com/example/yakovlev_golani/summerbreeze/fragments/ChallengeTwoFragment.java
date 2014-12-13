@@ -3,16 +3,16 @@ package com.example.yakovlev_golani.summerbreeze.fragments;
 import android.app.Fragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.yakovlev_golani.summerbreeze.R;
 import com.example.yakovlev_golani.summerbreeze.models.currentweather.CurrentWeather;
+import com.example.yakovlev_golani.summerbreeze.models.currentweather.Main;
+import com.example.yakovlev_golani.summerbreeze.models.currentweather.Weather;
+import com.example.yakovlev_golani.summerbreeze.utils.TemperatureConverter;
 import com.google.gson.Gson;
 
 import org.apache.http.HttpResponse;
@@ -25,12 +25,16 @@ import org.apache.http.impl.client.DefaultHttpClient;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * Created by Yakovlev-Golani on 11/12/14.
  */
 public class ChallengeTwoFragment extends Fragment{
     private TextView mLocationName;
+
+    private TextView mCurrentTemperature;
+    private TextView mCurrentConditions;
 
     public ChallengeTwoFragment() {
     }
@@ -41,6 +45,9 @@ public class ChallengeTwoFragment extends Fragment{
         View rootView = inflater.inflate(R.layout.challenge2, container, false);
 
         mLocationName = ((TextView) rootView.findViewById(R.id.city_name));
+        mCurrentTemperature = ((TextView) rootView.findViewById(R.id.current_temperature));
+        mCurrentConditions = ((TextView) rootView.findViewById(R.id.current_conditions));
+
         rootView.findViewById(R.id.ok_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -78,16 +85,16 @@ public class ChallengeTwoFragment extends Fragment{
                         @Override
                         protected void onPostExecute(final CurrentWeather currentWeather) {
                             super.onPostExecute(currentWeather);
-                            new Handler(Looper.getMainLooper()).post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    // Code here will run in UI thread
-                                    Toast.makeText(getActivity(), "Current temp in " +
-                                            currentWeather.getCoord().getLat() + "," + currentWeather.getCoord().getLon()
-                                            + " is " + currentWeather.getMain().getTemp(), Toast.LENGTH_LONG).show();
+                            if (currentWeather != null) {
+                                Main main = currentWeather.getMain();
+                                if(main != null) {
+                                    mCurrentTemperature.setText(String.valueOf(TemperatureConverter.getRoundTemperatureInCelsius(main.getTemp())));
                                 }
-                            });
-
+                                List<Weather> weatherList = currentWeather.getWeather();
+                                if (weatherList != null && weatherList.size() > 0){
+                                     mCurrentConditions.setText(getString(R.string.current_conditions) + weatherList.get(0).getDescription());
+                                }
+                            }
                         }
                     }.execute(locationString);
                 }
