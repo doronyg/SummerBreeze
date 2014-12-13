@@ -1,4 +1,4 @@
-package com.example.yakovlev_golani.summerbreeze;
+package com.example.yakovlev_golani.summerbreeze.fragments;
 
 import android.app.Fragment;
 import android.os.AsyncTask;
@@ -14,6 +14,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.yakovlev_golani.summerbreeze.R;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
