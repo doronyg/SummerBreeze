@@ -10,5 +10,6 @@
     <string name="write_something">Write something</string>
     <string name="location_hint">Location</string>
     <string name="current_conditions">"Current conditions: "</string>
+    <string name="celsius_sign">℃</string>
 
 </resources>

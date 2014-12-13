@@ -6,14 +6,18 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.yakovlev_golani.summerbreeze.R;
 import com.example.yakovlev_golani.summerbreeze.models.currentweather.CurrentWeather;
 import com.example.yakovlev_golani.summerbreeze.models.currentweather.Main;
 import com.example.yakovlev_golani.summerbreeze.models.currentweather.Weather;
+import com.example.yakovlev_golani.summerbreeze.utils.Constants;
+import com.example.yakovlev_golani.summerbreeze.utils.ImageUtils;
 import com.example.yakovlev_golani.summerbreeze.utils.TemperatureConverter;
 import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -25,16 +29,19 @@ import org.apache.http.impl.client.DefaultHttpClient;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.List;
 
 /**
  * Created by Yakovlev-Golani on 11/12/14.
  */
 public class ChallengeTwoFragment extends Fragment{
+
     private TextView mLocationName;
 
     private TextView mCurrentTemperature;
     private TextView mCurrentConditions;
+    private ImageView mCurrentWeatherImage;
 
     public ChallengeTwoFragment() {
     }
@@ -43,10 +50,7 @@ public class ChallengeTwoFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.challenge2, container, false);
-
-        mLocationName = ((TextView) rootView.findViewById(R.id.city_name));
-        mCurrentTemperature = ((TextView) rootView.findViewById(R.id.current_temperature));
-        mCurrentConditions = ((TextView) rootView.findViewById(R.id.current_conditions));
+        initViews(rootView);
 
         rootView.findViewById(R.id.ok_button).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,7 +66,7 @@ public class ChallengeTwoFragment extends Fragment{
                             CurrentWeather currentWeather = null;
                             try {
                                 final String CURRENT_WEATHER_PREFIX = "http://api.openweathermap.org/data/2.5/weather?q=";
-                                String url = CURRENT_WEATHER_PREFIX + location[0];
+                                String url = CURRENT_WEATHER_PREFIX + URLEncoder.encode(location[0], "UTF-8");
                                 response = httpclient.execute(new HttpGet(url));
                                 StatusLine statusLine = response.getStatusLine();
                                 if(statusLine.getStatusCode() == HttpStatus.SC_OK){
@@ -88,12 +92,16 @@ public class ChallengeTwoFragment extends Fragment{
                             if (currentWeather != null) {
                                 Main main = currentWeather.getMain();
                                 if(main != null) {
-                                    mCurrentTemperature.setText(String.valueOf(TemperatureConverter.getRoundTemperatureInCelsius(main.getTemp())));
+                                    mCurrentTemperature.setText(String.valueOf(TemperatureConverter.getRoundTemperatureInCelsius(main.getTemp())) + getString(R.string.celsius_sign));
                                 }
                                 List<Weather> weatherList = currentWeather.getWeather();
                                 if (weatherList != null && weatherList.size() > 0){
-                                     mCurrentConditions.setText(getString(R.string.current_conditions) + weatherList.get(0).getDescription());
+                                    Weather weather = weatherList.get(0);
+                                    mCurrentConditions.setText(getString(R.string.current_conditions) + weather.getDescription());
+                                    ImageUtils.setWeatherIcon(getActivity(), mCurrentWeatherImage, weather);
                                 }
+
+
                             }
                         }
                     }.execute(locationString);
@@ -102,6 +110,13 @@ public class ChallengeTwoFragment extends Fragment{
         });
 
         return rootView;
+    }
+
+    private void initViews(View rootView) {
+        mLocationName = ((TextView) rootView.findViewById(R.id.city_name));
+        mCurrentTemperature = ((TextView) rootView.findViewById(R.id.current_temperature));
+        mCurrentConditions = ((TextView) rootView.findViewById(R.id.current_conditions));
+        mCurrentWeatherImage = ((ImageView) rootView.findViewById(R.id.current_weather_image));
     }
 
     private static CurrentWeather parseCurrentWeather(String response) {
