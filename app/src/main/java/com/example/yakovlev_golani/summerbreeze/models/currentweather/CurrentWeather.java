@@ -1,6 +1,12 @@
 
 package com.example.yakovlev_golani.summerbreeze.models.currentweather;
 
+import com.example.yakovlev_golani.summerbreeze.models.Clouds;
+import com.example.yakovlev_golani.summerbreeze.models.Coord;
+import com.example.yakovlev_golani.summerbreeze.models.Main;
+import com.example.yakovlev_golani.summerbreeze.models.Sys;
+import com.example.yakovlev_golani.summerbreeze.models.Weather;
+import com.example.yakovlev_golani.summerbreeze.models.Wind;
 import com.google.gson.annotations.Expose;
 
 import java.util.ArrayList;

@@ -1,5 +1,5 @@
 
-package com.example.yakovlev_golani.summerbreeze.models.currentweather;
+package com.example.yakovlev_golani.summerbreeze.models;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

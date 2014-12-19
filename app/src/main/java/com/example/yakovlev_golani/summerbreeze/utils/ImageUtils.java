@@ -3,7 +3,7 @@ package com.example.yakovlev_golani.summerbreeze.utils;
 import android.app.Activity;
 import android.widget.ImageView;
 
-import com.example.yakovlev_golani.summerbreeze.models.currentweather.Weather;
+import com.example.yakovlev_golani.summerbreeze.models.Weather;
 import com.squareup.picasso.Picasso;
 
 /**
