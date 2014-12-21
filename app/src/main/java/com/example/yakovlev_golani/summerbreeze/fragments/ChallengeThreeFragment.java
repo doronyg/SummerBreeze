@@ -8,11 +8,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.example.yakovlev_golani.summerbreeze.DrawerActivity;
 import com.example.yakovlev_golani.summerbreeze.R;
 import com.example.yakovlev_golani.summerbreeze.api.CurrentWeatherApi;
-import com.example.yakovlev_golani.summerbreeze.models.currentweather.CurrentWeather;
+import com.example.yakovlev_golani.summerbreeze.models.Main;
+import com.example.yakovlev_golani.summerbreeze.models.Weather;
 import com.example.yakovlev_golani.summerbreeze.models.currentweatherforlocation.CurrentWeatherForLocation;
+import com.example.yakovlev_golani.summerbreeze.models.currentweatherforlocation.WeatherLocations;
 import com.example.yakovlev_golani.summerbreeze.utils.GooglePlayManager;
+
+import java.util.List;
 
 /**
  * Created by Yakovlev-Golani on 18/12/14.
@@ -41,8 +46,10 @@ public class ChallengeThreeFragment extends CurrentWeatherFragment {
             @Override
             public void onNotConnected() {
                 Toast.makeText(getActivity(), "Cannot get location", Toast.LENGTH_LONG).show();
+                ((DrawerActivity)getActivity()).hideLoadingSpinner();
             }
         });
+        ((DrawerActivity)getActivity()).showLoadingSpinner();
         return rootView;
     }
 
@@ -64,5 +71,18 @@ public class ChallengeThreeFragment extends CurrentWeatherFragment {
         };
 
         locationLocationCurrentWeatherAsyncTask.execute(location);
+    }
+
+    protected void showCurrentWeather(CurrentWeatherForLocation currentWeather) {
+        if (currentWeather != null) {
+            java.util.List<WeatherLocations> weatherLocationsList = currentWeather.getList();
+            if(weatherLocationsList != null && !weatherLocationsList.isEmpty()) {
+                WeatherLocations weatherLocation = weatherLocationsList.get(0);
+                List<Weather> weatherList = weatherLocation.getWeather();
+                Main main = weatherLocation.getMain();
+                showCurrentWeather(main, weatherList);
+            }
+        }
+        ((DrawerActivity)getActivity()).hideLoadingSpinner();
     }
 }

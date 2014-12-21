@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.yakovlev_golani.summerbreeze.fragments.ChallengeOneFragment;
@@ -27,11 +28,16 @@ import com.example.yakovlev_golani.summerbreeze.fragments.ChallengeTwoFragment;
 public class DrawerActivity extends Activity {
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
+    private ProgressBar mLoadingSpinner;
     private ActionBarDrawerToggle mDrawerToggle;
-
+    private View mContentFrame;
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;
     private String mChallangesStrings[];
+
+    public static String getChallengeString(int i) {
+        return "Challenge " + (i + 1);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +47,7 @@ public class DrawerActivity extends Activity {
         mTitle = mDrawerTitle = getTitle();
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
+        mLoadingSpinner = (ProgressBar) findViewById(R.id.loading_spinner);
 
         mChallangesStrings = new String[7];
         for (int i = 0; i < 7; i++) {
@@ -83,10 +90,6 @@ public class DrawerActivity extends Activity {
         }
     }
 
-    public static String getChallengeString(int i) {
-        return "Challenge " + (i + 1);
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -104,14 +107,6 @@ public class DrawerActivity extends Activity {
         }
         return super.onOptionsItemSelected(item);
 
-    }
-
-    /* The click listener for ListView in the navigation drawer */
-    private class DrawerItemClickListener implements ListView.OnItemClickListener {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            selectItem(position);
-        }
     }
 
     private void selectItem(int position) {
@@ -171,6 +166,18 @@ public class DrawerActivity extends Activity {
         mDrawerToggle.onConfigurationChanged(newConfig);
     }
 
+    public void showLoadingSpinner(){
+        if(mLoadingSpinner != null) {
+            mLoadingSpinner.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void hideLoadingSpinner(){
+        if(mLoadingSpinner != null) {
+            mLoadingSpinner.setVisibility(View.GONE);
+        }
+    }
+
     /**
      * Fragment that appears in the "content_frame", shows a planet
      */
@@ -190,6 +197,14 @@ public class DrawerActivity extends Activity {
             ((TextView) rootView.findViewById(R.id.challenge_name)).setText(getChallengeString(i));
             getActivity().setTitle(getChallengeString(i));
             return rootView;
+        }
+    }
+
+    /* The click listener for ListView in the navigation drawer */
+    private class DrawerItemClickListener implements ListView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            selectItem(position);
         }
     }
 }

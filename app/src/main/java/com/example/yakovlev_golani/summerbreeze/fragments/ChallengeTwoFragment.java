@@ -7,9 +7,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.yakovlev_golani.summerbreeze.DrawerActivity;
 import com.example.yakovlev_golani.summerbreeze.R;
 import com.example.yakovlev_golani.summerbreeze.api.CurrentWeatherApi;
+import com.example.yakovlev_golani.summerbreeze.models.Main;
+import com.example.yakovlev_golani.summerbreeze.models.Weather;
 import com.example.yakovlev_golani.summerbreeze.models.currentweather.CurrentWeather;
+
+import java.util.List;
 
 
 /**
@@ -36,6 +41,7 @@ public class ChallengeTwoFragment extends CurrentWeatherFragment{
             public void onClick(View v) {
                 String locationName = mLocationName.getText().toString();
                 if (!locationName.isEmpty()) {
+                    ((DrawerActivity)getActivity()).showLoadingSpinner();
                     getCurrentWeatherForLocationName(locationName);
                 }
             }
@@ -58,5 +64,15 @@ public class ChallengeTwoFragment extends CurrentWeatherFragment{
                 showCurrentWeather(currentWeather);
             }
         }.execute(locationString);
+    }
+
+    private void showCurrentWeather(CurrentWeather currentWeather) {
+        if (currentWeather != null) {
+            Main main = currentWeather.getMain();
+            List<Weather> weatherList = currentWeather.getWeather();
+
+            showCurrentWeather(main, weatherList);
+        }
+        ((DrawerActivity)getActivity()).hideLoadingSpinner();
     }
 }
