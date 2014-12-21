@@ -1,9 +1,11 @@
 
 package com.example.yakovlev_golani.summerbreeze.models.currentweatherforlocation;
 
-import java.util.ArrayList;
-import javax.annotation.Generated;
 import com.google.gson.annotations.Expose;
+
+import java.util.ArrayList;
+
+import javax.annotation.Generated;
 
 @Generated("org.jsonschema2pojo")
 public class CurrentWeatherForLocation {

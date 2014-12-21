@@ -9,7 +9,7 @@ import com.example.yakovlev_golani.summerbreeze.R;
 import com.example.yakovlev_golani.summerbreeze.models.Main;
 import com.example.yakovlev_golani.summerbreeze.models.Weather;
 import com.example.yakovlev_golani.summerbreeze.utils.ImageUtils;
-import com.example.yakovlev_golani.summerbreeze.utils.TemperatureConverter;
+import com.example.yakovlev_golani.summerbreeze.utils.Utils;
 
 import java.util.List;
 
@@ -30,7 +30,7 @@ public abstract class CurrentWeatherFragment extends Fragment {
 
     protected void showCurrentWeather(Main main, List<Weather> weatherList) {
         if(main != null) {
-            mCurrentTemperature.setText(String.valueOf(TemperatureConverter.getRoundTemperatureInCelsius(main.getTemp())) + getString(R.string.celsius_sign));
+            Utils.setTemperatureText(getActivity(), mCurrentTemperature, main.getTemp());
         }
 
         if (weatherList != null && weatherList.size() > 0){
@@ -39,5 +39,4 @@ public abstract class CurrentWeatherFragment extends Fragment {
             ImageUtils.setWeatherIcon(getActivity(), mCurrentWeatherImage, weather);
         }
     }
-
 }

@@ -11,5 +11,6 @@
     <string name="location_hint">Location</string>
     <string name="current_conditions">"Current conditions: "</string>
     <string name="celsius_sign">℃</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

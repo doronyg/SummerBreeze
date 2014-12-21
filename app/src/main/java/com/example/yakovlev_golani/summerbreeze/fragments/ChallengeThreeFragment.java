@@ -15,7 +15,7 @@ import com.example.yakovlev_golani.summerbreeze.models.Main;
 import com.example.yakovlev_golani.summerbreeze.models.Weather;
 import com.example.yakovlev_golani.summerbreeze.models.currentweatherforlocation.CurrentWeatherForLocation;
 import com.example.yakovlev_golani.summerbreeze.models.currentweatherforlocation.WeatherLocations;
-import com.example.yakovlev_golani.summerbreeze.utils.GooglePlayManager;
+import com.example.yakovlev_golani.summerbreeze.utils.LocationHelper;
 
 import java.util.List;
 
@@ -28,34 +28,38 @@ public class ChallengeThreeFragment extends CurrentWeatherFragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.challenge3, container, false);
         super.initViews(rootView);
+        ((DrawerActivity)getActivity()).showLoadingSpinner();
+        LocationHelper.getLocation(getActivity(), new LocationHelper.LocationListener() {
 
-        final GooglePlayManager googlePlayManager = GooglePlayManager.getInstance(getActivity());
-
-        googlePlayManager.addListener(new GooglePlayManager.GooglePlayManagerListener() {
             @Override
-            public void onConnected() {
-
-                Location location = googlePlayManager.getLastLocation();
-                if (location != null) {
-                    showCurrentWeatherForLocation(location);
-                } else {
-                    Toast.makeText(getActivity(), "Location cannot be determined", Toast.LENGTH_LONG).show();
-                }
+            public void onLocationReceived(Location location) {
+                showLocation(location);
+                ((DrawerActivity)getActivity()).hideLoadingSpinner();
             }
 
             @Override
-            public void onNotConnected() {
+            public void onLocationFailed() {
                 Toast.makeText(getActivity(), "Cannot get location", Toast.LENGTH_LONG).show();
                 ((DrawerActivity)getActivity()).hideLoadingSpinner();
             }
         });
-        ((DrawerActivity)getActivity()).showLoadingSpinner();
+
+
+
         return rootView;
+    }
+
+    private void showLocation(Location location) {
+        if (location != null) {
+            showCurrentWeatherForLocation(location);
+        } else {
+            Toast.makeText(getActivity(), "Location cannot be determined", Toast.LENGTH_LONG).show();
+        }
     }
 
     private void showCurrentWeatherForLocation(Location location) {
 
-        AsyncTask<Location, Location, CurrentWeatherForLocation> locationLocationCurrentWeatherAsyncTask = new AsyncTask<Location, Location, CurrentWeatherForLocation>() {
+        AsyncTask<Location, Location, CurrentWeatherForLocation> locationCurrentWeatherAsyncTask = new AsyncTask<Location, Location, CurrentWeatherForLocation>() {
 
             @Override
             protected CurrentWeatherForLocation doInBackground(Location... locations) {
@@ -70,7 +74,7 @@ public class ChallengeThreeFragment extends CurrentWeatherFragment {
             }
         };
 
-        locationLocationCurrentWeatherAsyncTask.execute(location);
+        locationCurrentWeatherAsyncTask.execute(location);
     }
 
     protected void showCurrentWeather(CurrentWeatherForLocation currentWeather) {

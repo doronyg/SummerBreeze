@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.example.yakovlev_golani.summerbreeze.views.ForecastItemView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="5dp">
+
+    <TextView
+        android:id="@+id/date_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="December 24th"
+        android:textColor="#aa000000"
+        android:textSize="18sp"/>
+
+    <ImageView
+        android:id="@+id/weather_image"
+        android:layout_width="150dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        />
+    <TextView
+        android:id="@+id/max_temperature"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="25 degrees"
+        android:textColor="#dddd3333"
+        android:textSize="18sp"/>
+
+    <TextView
+        android:id="@+id/min_temperature"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="25 degrees"
+        android:textColor="#dd3333dd"
+        android:textSize="18sp"/>
+
+</com.example.yakovlev_golani.summerbreeze.views.ForecastItemView>

@@ -1,6 +1,6 @@
 package com.example.yakovlev_golani.summerbreeze.utils;
 
-import android.app.Activity;
+import android.content.Context;
 import android.widget.ImageView;
 
 import com.example.yakovlev_golani.summerbreeze.models.Weather;
@@ -12,8 +12,8 @@ import com.squareup.picasso.Picasso;
 public class ImageUtils {
     public static final String PNG_EXTENSION = ".png";
 
-    public static void setWeatherIcon(Activity activity, ImageView imageView, Weather weather){
+    public static void setWeatherIcon(Context context, ImageView imageView, Weather weather){
         String url = Constants.ICON_URL_BASE + weather.getIcon() + PNG_EXTENSION;
-        Picasso.with(activity).load(url).fit().into(imageView);
+        Picasso.with(context).load(url).fit().into(imageView);
     }
 }

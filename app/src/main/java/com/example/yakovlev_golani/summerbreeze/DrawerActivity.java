@@ -20,6 +20,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.yakovlev_golani.summerbreeze.fragments.ChallengeFourFragment;
 import com.example.yakovlev_golani.summerbreeze.fragments.ChallengeOneFragment;
 import com.example.yakovlev_golani.summerbreeze.fragments.ChallengeThreeFragment;
 import com.example.yakovlev_golani.summerbreeze.fragments.ChallengeTwoFragment;
@@ -122,6 +123,9 @@ public class DrawerActivity extends Activity {
                 break;
             case 2:
                 fragment = new ChallengeThreeFragment();
+                break;
+            case 3:
+                fragment = new ChallengeFourFragment();
                 break;
             default:
                 fragment = new EmptyChallengeFragment();
