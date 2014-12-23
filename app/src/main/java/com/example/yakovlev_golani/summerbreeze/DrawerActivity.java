@@ -1,6 +1,5 @@
 package com.example.yakovlev_golani.summerbreeze;
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.res.Configuration;
@@ -17,7 +16,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.yakovlev_golani.summerbreeze.fragments.ChallengeFourFragment;
@@ -26,12 +24,11 @@ import com.example.yakovlev_golani.summerbreeze.fragments.ChallengeThreeFragment
 import com.example.yakovlev_golani.summerbreeze.fragments.ChallengeTwoFragment;
 
 
-public class DrawerActivity extends Activity {
+public class DrawerActivity extends BaseActivity {
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
-    private ProgressBar mLoadingSpinner;
+
     private ActionBarDrawerToggle mDrawerToggle;
-    private View mContentFrame;
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;
     private String mChallangesStrings[];
@@ -45,10 +42,12 @@ public class DrawerActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        initLoadingSpinnerView();
+
         mTitle = mDrawerTitle = getTitle();
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
-        mLoadingSpinner = (ProgressBar) findViewById(R.id.loading_spinner);
+
 
         mChallangesStrings = new String[7];
         for (int i = 0; i < 7; i++) {
@@ -168,18 +167,6 @@ public class DrawerActivity extends Activity {
         super.onConfigurationChanged(newConfig);
         // Pass any configuration change to the drawer toggles
         mDrawerToggle.onConfigurationChanged(newConfig);
-    }
-
-    public void showLoadingSpinner(){
-        if(mLoadingSpinner != null) {
-            mLoadingSpinner.setVisibility(View.VISIBLE);
-        }
-    }
-
-    public void hideLoadingSpinner(){
-        if(mLoadingSpinner != null) {
-            mLoadingSpinner.setVisibility(View.GONE);
-        }
     }
 
     /**
