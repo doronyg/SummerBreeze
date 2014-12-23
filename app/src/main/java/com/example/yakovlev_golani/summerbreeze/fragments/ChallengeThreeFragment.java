@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.example.yakovlev_golani.summerbreeze.DrawerActivity;
+import com.example.yakovlev_golani.summerbreeze.BaseActivity;
 import com.example.yakovlev_golani.summerbreeze.R;
 import com.example.yakovlev_golani.summerbreeze.api.CurrentWeatherApi;
 import com.example.yakovlev_golani.summerbreeze.models.Main;
@@ -26,27 +26,30 @@ public class ChallengeThreeFragment extends CurrentWeatherFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.challenge3, container, false);
+        int challengeResourceId = getFragmentResourceId();
+        View rootView = inflater.inflate(challengeResourceId, container, false);
         super.initViews(rootView);
-        ((DrawerActivity)getActivity()).showLoadingSpinner();
+        ((BaseActivity)getActivity()).showLoadingSpinner();
         LocationHelper.getLocation(getActivity(), new LocationHelper.LocationListener() {
 
             @Override
             public void onLocationReceived(Location location) {
                 showLocation(location);
-                ((DrawerActivity)getActivity()).hideLoadingSpinner();
+                ((BaseActivity)getActivity()).hideLoadingSpinner();
             }
 
             @Override
             public void onLocationFailed() {
                 Toast.makeText(getActivity(), "Cannot get location", Toast.LENGTH_LONG).show();
-                ((DrawerActivity)getActivity()).hideLoadingSpinner();
+                ((BaseActivity)getActivity()).hideLoadingSpinner();
             }
         });
 
-
-
         return rootView;
+    }
+
+    protected int getFragmentResourceId() {
+        return R.layout.challenge3;
     }
 
     private void showLocation(Location location) {
@@ -87,6 +90,6 @@ public class ChallengeThreeFragment extends CurrentWeatherFragment {
                 showCurrentWeather(main, weatherList);
             }
         }
-        ((DrawerActivity)getActivity()).hideLoadingSpinner();
+        ((BaseActivity)getActivity()).hideLoadingSpinner();
     }
 }

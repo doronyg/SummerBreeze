@@ -13,8 +13,6 @@ import com.example.yakovlev_golani.summerbreeze.models.forecast.Temp;
 import com.example.yakovlev_golani.summerbreeze.utils.ImageUtils;
 import com.example.yakovlev_golani.summerbreeze.utils.Utils;
 
-import org.joda.time.DateTime;
-
 import java.util.List;
 
 /**
@@ -77,8 +75,7 @@ public class ForecastItemView extends LinearLayout {
 
     private void setDateText(Integer forecastItemDate) {
         if (forecastItemDate != null){
-            DateTime dateTime = new DateTime(forecastItemDate.longValue() * 1000L);
-            dateText.setText(Utils.DATE_FORMATTER.print(dateTime));
+            dateText.setText(Utils.getDateString(forecastItemDate));
         }
     }
 }

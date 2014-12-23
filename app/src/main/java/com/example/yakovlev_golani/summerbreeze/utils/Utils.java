@@ -5,6 +5,7 @@ import android.widget.TextView;
 
 import com.example.yakovlev_golani.summerbreeze.R;
 
+import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
@@ -14,6 +15,11 @@ import org.joda.time.format.DateTimeFormatter;
  */
 public class Utils {
     public static DateTimeFormatter DATE_FORMATTER = DateTimeFormat.forPattern("MMM dd");
+
+    public static String getDateString(Integer forecastItemDate) {
+        DateTime dateTime = new DateTime(forecastItemDate.longValue() * 1000L);
+        return Utils.DATE_FORMATTER.print(dateTime);
+    }
 
     public static void setTemperatureText(Context context, TextView textView, Double temp) {
         textView.setText(String.valueOf(TemperatureConverter.getRoundTemperatureInCelsius(temp)) + context.getString(R.string.celsius_sign));

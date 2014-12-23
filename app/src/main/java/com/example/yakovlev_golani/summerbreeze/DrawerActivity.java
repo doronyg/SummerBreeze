@@ -18,6 +18,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.yakovlev_golani.summerbreeze.fragments.ChallengeFiveFragment;
 import com.example.yakovlev_golani.summerbreeze.fragments.ChallengeFourFragment;
 import com.example.yakovlev_golani.summerbreeze.fragments.ChallengeOneFragment;
 import com.example.yakovlev_golani.summerbreeze.fragments.ChallengeThreeFragment;
@@ -125,6 +126,9 @@ public class DrawerActivity extends BaseActivity {
                 break;
             case 3:
                 fragment = new ChallengeFourFragment();
+                break;
+            case 4:
+                fragment = new ChallengeFiveFragment();
                 break;
             default:
                 fragment = new EmptyChallengeFragment();
