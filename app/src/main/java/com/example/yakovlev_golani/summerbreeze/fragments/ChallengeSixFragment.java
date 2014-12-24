@@ -22,14 +22,14 @@ import java.io.StringWriter;
 
 public class ChallengeSixFragment extends Fragment {
 
-    WebView webView;
+    protected WebView webView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.challenge6, container, false);
         initViews(rootView);
-        webView.getSettings().setJavaScriptEnabled(true);
+        initWebView();
 
         ((BaseActivity)getActivity()).showLoadingSpinner();
         LocationHelper.getLocation(getActivity(), new LocationHelper.LocationListener() {
@@ -50,13 +50,16 @@ public class ChallengeSixFragment extends Fragment {
         return rootView;
     }
 
-    private void showMapForLocation(Location location) {
-        AssetManager assetManager = getActivity().getAssets();
+    protected void initWebView() {
+        webView.getSettings().setJavaScriptEnabled(true);
+    }
 
+    protected void showMapForLocation(Location location) {
+        AssetManager assetManager = getActivity().getAssets();
 
         String htmlString;
         try {
-            InputStream inputStream = assetManager.open("challenge6_map.html");
+            InputStream inputStream = assetManager.open(getFileName());
             StringWriter writer = new StringWriter();
             IOUtils.copy(inputStream, writer, "UTF-8");
             htmlString = writer.toString();
@@ -65,9 +68,17 @@ public class ChallengeSixFragment extends Fragment {
             return;
         }
 
-        htmlString = htmlString.replace("LAT_VAR", String.valueOf(location.getLatitude())).replace("LNG_VAR", String.valueOf(location.getLongitude()));
+        htmlString = formatHtmlString(location, htmlString);
         webView.loadData(htmlString, "text/html", null);
 
+    }
+
+    protected String formatHtmlString(Location location, String htmlString) {
+        return htmlString.replace("LAT_VAR", String.valueOf(location.getLatitude())).replace("LNG_VAR", String.valueOf(location.getLongitude()));
+    }
+
+    protected String getFileName() {
+        return "challenge6_map.html";
     }
 
     protected void initViews(View rootView) {
