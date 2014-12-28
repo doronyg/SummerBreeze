@@ -6,7 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.yakovlev_golani.summerbreeze.Challenge4SecondActivity;
+import com.example.yakovlev_golani.summerbreeze.ForecastActivity;
 import com.example.yakovlev_golani.summerbreeze.R;
 
 /**
@@ -27,7 +27,7 @@ public class ChallengeFourFragment extends ChallengeThreeFragment {
             forecastButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(getActivity(), Challenge4SecondActivity.class);
+                    Intent intent = new Intent(getActivity(), ForecastActivity.class);
                     startActivity(intent);
                 }
             });

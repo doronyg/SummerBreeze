@@ -21,6 +21,9 @@ import java.util.ArrayList;
 
 public class ForecastFragment extends Fragment {
 
+    public static final String LATITUDE = "KEY_LATITUDE";
+    public static final String LONGITUDE = "KEY_LONGITUDE";
+
     private RecyclerView recyclerView;
 
     public ForecastFragment() {
@@ -46,43 +49,56 @@ public class ForecastFragment extends Fragment {
 
     private void getForecast() {
         ((BaseActivity)getActivity()).showLoadingSpinner();
-        LocationHelper.getLocation(getActivity(), new LocationHelper.LocationListener() {
+        if (getArguments() == null) {
+            LocationHelper.getLocation(getActivity(), getLocationListener());
+        } else {
+            Double lat = getArguments().getDouble(LATITUDE);
+            Double lng = getArguments().getDouble(LONGITUDE);
+            showForecastForLocation(lat, lng);
+        }
+    }
+
+    private LocationHelper.LocationListener getLocationListener() {
+        return new LocationHelper.LocationListener() {
             @Override
             public void onLocationReceived(Location location) {
-                AsyncTask<Location, Location, Forecast> getForecastForLocationAsyncTask = new AsyncTask<Location, Location, Forecast>() {
-
-                    @Override
-                    protected Forecast doInBackground(Location... locations) {
-                        Location currentLocation = locations[0];
-                        return ForecastApi.getForecast(currentLocation.getLongitude(), currentLocation.getLatitude());
-                    }
-
-                    @Override
-                    protected void onPostExecute(final Forecast forecast) {
-                        super.onPostExecute(forecast);
-                        if(forecast != null) {
-                            recyclerView.setAdapter(new ForecastAdapter(forecast.getList()));
-                        }
-                        ((BaseActivity)getActivity()).hideLoadingSpinner();
-                    }
-                };
-                getForecastForLocationAsyncTask.execute(location);
+                showForecastForLocation(location.getLatitude(), location.getLongitude());
             }
 
             @Override
             public void onLocationFailed() {
                 ((BaseActivity)getActivity()).hideLoadingSpinner();
             }
-        });
+        };
+    }
 
+    protected void showForecastForLocation(final Double lat, final Double lng) {
+        AsyncTask<Void, Void, Forecast> getForecastForLocationAsyncTask = new AsyncTask<Void, Void, Forecast>() {
+
+            @Override
+            protected Forecast doInBackground(Void... voids) {
+                return ForecastApi.getForecast(lng, lat);
+            }
+
+            @Override
+            protected void onPostExecute(final Forecast forecast) {
+                super.onPostExecute(forecast);
+                showForecast(forecast);
+            }
+        };
+        getForecastForLocationAsyncTask.execute();
+    }
+
+    private void showForecast(Forecast forecast) {
+        if(forecast != null) {
+            recyclerView.setAdapter(new ForecastAdapter(forecast.getList()));
+        }
+        ((BaseActivity)getActivity()).hideLoadingSpinner();
     }
 
     private void initViews(View view) {
         recyclerView = (RecyclerView)view.findViewById(R.id.forecast_view);
         recyclerView.setAdapter(new ForecastAdapter(new ArrayList<ForecastItem>()));
     }
-
-
-
 
 }

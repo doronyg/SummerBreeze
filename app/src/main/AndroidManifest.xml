@@ -22,8 +22,17 @@
         </activity>
 
         <activity
-            android:name=".Challenge4SecondActivity"
+            android:name=".ForecastActivity"
             android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:host="summer.breeze.io"
+                    android:pathPrefix="/"
+                    android:scheme="sbreeze" />
+            </intent-filter>
+
         </activity>
     </application>
 
