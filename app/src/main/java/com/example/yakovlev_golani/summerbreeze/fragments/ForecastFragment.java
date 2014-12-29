@@ -15,14 +15,13 @@ import com.example.yakovlev_golani.summerbreeze.adapters.ForecastAdapter;
 import com.example.yakovlev_golani.summerbreeze.api.ForecastApi;
 import com.example.yakovlev_golani.summerbreeze.models.forecast.Forecast;
 import com.example.yakovlev_golani.summerbreeze.models.forecast.ForecastItem;
+import com.example.yakovlev_golani.summerbreeze.utils.Constants;
 import com.example.yakovlev_golani.summerbreeze.utils.LocationHelper;
+import com.example.yakovlev_golani.summerbreeze.utils.Utils;
 
 import java.util.ArrayList;
 
 public class ForecastFragment extends Fragment {
-
-    public static final String LATITUDE = "KEY_LATITUDE";
-    public static final String LONGITUDE = "KEY_LONGITUDE";
 
     private RecyclerView recyclerView;
 
@@ -49,11 +48,12 @@ public class ForecastFragment extends Fragment {
 
     private void getForecast() {
         ((BaseActivity)getActivity()).showLoadingSpinner();
-        if (getArguments() == null) {
+        Bundle arguments = getArguments();
+        if (Utils.hasInvalidLocationArguments(arguments)) {
             LocationHelper.getLocation(getActivity(), getLocationListener());
         } else {
-            Double lat = getArguments().getDouble(LATITUDE);
-            Double lng = getArguments().getDouble(LONGITUDE);
+            Double lat = arguments.getDouble(Constants.LATITUDE);
+            Double lng = arguments.getDouble(Constants.LONGITUDE);
             showForecastForLocation(lat, lng);
         }
     }

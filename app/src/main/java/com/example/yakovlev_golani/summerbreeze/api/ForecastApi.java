@@ -12,13 +12,13 @@ import java.util.Locale;
  * Created by Yakovlev-Golani on 21/12/14.
  */
 public class ForecastApi {
-    final static String FORCAST_BY_LOCATION = "http://api.openweathermap.org/data/2.5/forecast/daily?";
+    final static String FORECAST_BY_LOCATION = "http://api.openweathermap.org/data/2.5/forecast/daily?";
     final static String LOCATION_FORMAT = "lat=%.2f&lon=%.2f&cnt=10&mode=json";
 
     public static Forecast getForecast(double longitude, double latitude) {
 
         try {
-            String url = FORCAST_BY_LOCATION + String.format(Locale.ENGLISH, LOCATION_FORMAT, latitude, longitude);
+            String url = FORECAST_BY_LOCATION + String.format(Locale.ENGLISH, LOCATION_FORMAT, latitude, longitude);
             NetworkResponseParser<Forecast> networkResponseParser = new NetworkResponseParser<Forecast>(Forecast.class);
             return networkResponseParser.getResponse(url);
         } catch (ClientProtocolException e) {

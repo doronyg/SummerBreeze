@@ -1,5 +1,7 @@
 package com.example.yakovlev_golani.summerbreeze.utils;
 
+import android.util.Log;
+
 import com.google.gson.Gson;
 
 import org.apache.http.HttpResponse;
@@ -35,6 +37,7 @@ public class NetworkResponseParser<T extends Object> {
     }
 
     public T getResponse(String url) throws IOException {
+        Log.i("summer_breeze", "Get data from url: " + url);
         T returnValue;
         HttpClient httpclient = new DefaultHttpClient();
         HttpResponse response;

@@ -1,6 +1,7 @@
 package com.example.yakovlev_golani.summerbreeze.utils;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.widget.TextView;
 
 import com.example.yakovlev_golani.summerbreeze.R;
@@ -23,5 +24,9 @@ public class Utils {
 
     public static void setTemperatureText(Context context, TextView textView, Double temp) {
         textView.setText(String.valueOf(TemperatureConverter.getRoundTemperatureInCelsius(temp)) + context.getString(R.string.celsius_sign));
+    }
+
+    public static boolean hasInvalidLocationArguments(Bundle args) {
+        return args == null || args.get(Constants.LATITUDE) == null || args.get(Constants.LONGITUDE) == null;
     }
 }

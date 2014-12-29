@@ -15,7 +15,9 @@ import com.example.yakovlev_golani.summerbreeze.models.Main;
 import com.example.yakovlev_golani.summerbreeze.models.Weather;
 import com.example.yakovlev_golani.summerbreeze.models.currentweatherforlocation.CurrentWeatherForLocation;
 import com.example.yakovlev_golani.summerbreeze.models.currentweatherforlocation.WeatherLocations;
+import com.example.yakovlev_golani.summerbreeze.utils.Constants;
 import com.example.yakovlev_golani.summerbreeze.utils.LocationHelper;
+import com.example.yakovlev_golani.summerbreeze.utils.Utils;
 
 import java.util.List;
 
@@ -30,20 +32,26 @@ public class ChallengeThreeFragment extends CurrentWeatherFragment {
         View rootView = inflater.inflate(challengeResourceId, container, false);
         super.initViews(rootView);
         ((BaseActivity)getActivity()).showLoadingSpinner();
-        LocationHelper.getLocation(getActivity(), new LocationHelper.LocationListener() {
 
-            @Override
-            public void onLocationReceived(Location location) {
-                showLocation(location);
-                ((BaseActivity)getActivity()).hideLoadingSpinner();
-            }
+        Bundle args = getArguments();
+        if (Utils.hasInvalidLocationArguments(args)) {
+            LocationHelper.getLocation(getActivity(), new LocationHelper.LocationListener() {
 
-            @Override
-            public void onLocationFailed() {
-                Toast.makeText(getActivity(), "Cannot get location", Toast.LENGTH_LONG).show();
-                ((BaseActivity)getActivity()).hideLoadingSpinner();
-            }
-        });
+                @Override
+                public void onLocationReceived(Location location) {
+                    showLocation(location);
+                    ((BaseActivity) getActivity()).hideLoadingSpinner();
+                }
+
+                @Override
+                public void onLocationFailed() {
+                    Toast.makeText(getActivity(), "Cannot get location", Toast.LENGTH_LONG).show();
+                    ((BaseActivity) getActivity()).hideLoadingSpinner();
+                }
+            });
+        } else {
+            showCurrentWeatherForLocation(args.getDouble(Constants.LATITUDE), args.getDouble(Constants.LONGITUDE));
+        }
 
         return rootView;
     }
@@ -54,20 +62,20 @@ public class ChallengeThreeFragment extends CurrentWeatherFragment {
 
     private void showLocation(Location location) {
         if (location != null) {
-            showCurrentWeatherForLocation(location);
+            showCurrentWeatherForLocation(location.getLatitude(), location.getLongitude());
         } else {
             Toast.makeText(getActivity(), "Location cannot be determined", Toast.LENGTH_LONG).show();
         }
     }
 
-    private void showCurrentWeatherForLocation(Location location) {
+    private void showCurrentWeatherForLocation(final double lat, final double lng) {
 
-        AsyncTask<Location, Location, CurrentWeatherForLocation> locationCurrentWeatherAsyncTask = new AsyncTask<Location, Location, CurrentWeatherForLocation>() {
+        AsyncTask<Void, Void, CurrentWeatherForLocation> locationCurrentWeatherAsyncTask = new AsyncTask<Void, Void, CurrentWeatherForLocation>() {
 
             @Override
-            protected CurrentWeatherForLocation doInBackground(Location... locations) {
-                Location currentLocation = locations[0];
-                return CurrentWeatherApi.getCurrentWeather(currentLocation.getLongitude(), currentLocation.getLatitude());
+            protected CurrentWeatherForLocation doInBackground(Void... voids) {
+
+                return CurrentWeatherApi.getCurrentWeather(lng, lat);
             }
 
             @Override
@@ -77,7 +85,7 @@ public class ChallengeThreeFragment extends CurrentWeatherFragment {
             }
         };
 
-        locationCurrentWeatherAsyncTask.execute(location);
+        locationCurrentWeatherAsyncTask.execute();
     }
 
     protected void showCurrentWeather(CurrentWeatherForLocation currentWeather) {

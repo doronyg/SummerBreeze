@@ -2,6 +2,7 @@ package com.example.yakovlev_golani.summerbreeze.fragments;
 
 import android.app.Fragment;
 import android.graphics.Color;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -16,6 +17,8 @@ import com.example.yakovlev_golani.summerbreeze.models.historicalweather.Histori
 import com.example.yakovlev_golani.summerbreeze.models.historicalweather.HistoricalWeather;
 import com.example.yakovlev_golani.summerbreeze.models.historicalweather.HistoricalWeatherListItem;
 import com.example.yakovlev_golani.summerbreeze.models.historicalweather.Temp;
+import com.example.yakovlev_golani.summerbreeze.utils.Constants;
+import com.example.yakovlev_golani.summerbreeze.utils.LocationHelper;
 import com.example.yakovlev_golani.summerbreeze.utils.TemperatureConverter;
 import com.example.yakovlev_golani.summerbreeze.utils.Utils;
 import com.jjoe64.graphview.GraphView;
@@ -30,7 +33,7 @@ import static com.jjoe64.graphview.GraphView.GraphViewData;
 /**
  * Created by Yakovlev-Golani on 22/12/14.
  */
-public class ChallengeFiveFragment extends Fragment {
+public class HistoricalDataFragment extends Fragment {
 
     private LinearLayout mainView;
 
@@ -50,11 +53,35 @@ public class ChallengeFiveFragment extends Fragment {
 
     private void showHistoricalWeather() {
         ((BaseActivity)getActivity()).showLoadingSpinner();
+
+        Bundle arguments = getArguments();
+        if (!Utils.hasInvalidLocationArguments(arguments)) {
+            Double lat = arguments.getDouble(Constants.LATITUDE);
+            Double lng = arguments.getDouble(Constants.LONGITUDE);
+            showHistoricalDataForLocation(lat, lng);
+        } else {
+
+            LocationHelper.getLocation(getActivity(), new LocationHelper.LocationListener() {
+                @Override
+                public void onLocationReceived(Location location) {
+                    showHistoricalDataForLocation(location.getLatitude(), location.getLongitude());
+                }
+
+                @Override
+                public void onLocationFailed() {
+                    ((BaseActivity) getActivity()).showLoadingSpinner();
+                }
+            });
+        }
+
+    }
+
+    protected void showHistoricalDataForLocation(final double latitude, final double longitude) {
         AsyncTask<Void, Void, List<HistoricalData>> HistoricalWeatherAsyncTask = new AsyncTask<Void, Void, List<HistoricalData>>() {
 
             @Override
             protected List<HistoricalData> doInBackground(Void... voids) {
-                HistoricalWeather historicalWeather = HistoricalWeatherApi.getHistoricalWeather();
+                HistoricalWeather historicalWeather = HistoricalWeatherApi.getHistoricalWeather(latitude, longitude);
 
                 if(historicalWeather != null){
                     return getHistoricalDataFromHistoricalWeather(historicalWeather);
@@ -106,7 +133,7 @@ public class ChallengeFiveFragment extends Fragment {
                 }
 
                 GraphViewSeries maxTempsSeries = new GraphViewSeries("Max", new GraphViewSeries.GraphViewSeriesStyle(Color.rgb(200, 20, 20), 3), maxTemps);
-                GraphViewSeries minTempsSeries = new GraphViewSeries("Min", new GraphViewSeries.GraphViewSeriesStyle(Color.rgb(20, 200, 20), 3), minTemps);
+                GraphViewSeries minTempsSeries = new GraphViewSeries("Min", new GraphViewSeries.GraphViewSeriesStyle(Color.rgb(20, 20, 200), 3), minTemps);
 
                 GraphView graphView = new LineGraphView(
                         getActivity(),

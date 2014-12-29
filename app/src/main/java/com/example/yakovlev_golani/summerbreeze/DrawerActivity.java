@@ -18,13 +18,13 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.example.yakovlev_golani.summerbreeze.fragments.ChallengeFiveFragment;
 import com.example.yakovlev_golani.summerbreeze.fragments.ChallengeFourFragment;
 import com.example.yakovlev_golani.summerbreeze.fragments.ChallengeOneFragment;
 import com.example.yakovlev_golani.summerbreeze.fragments.ChallengeSevenFragment;
 import com.example.yakovlev_golani.summerbreeze.fragments.ChallengeSixFragment;
 import com.example.yakovlev_golani.summerbreeze.fragments.ChallengeThreeFragment;
 import com.example.yakovlev_golani.summerbreeze.fragments.ChallengeTwoFragment;
+import com.example.yakovlev_golani.summerbreeze.fragments.HistoricalDataFragment;
 
 
 public class DrawerActivity extends BaseActivity {
@@ -130,7 +130,7 @@ public class DrawerActivity extends BaseActivity {
                 fragment = new ChallengeFourFragment();
                 break;
             case 4:
-                fragment = new ChallengeFiveFragment();
+                fragment = new HistoricalDataFragment();
                 break;
             case 5:
                 fragment = new ChallengeSixFragment();
@@ -148,7 +148,7 @@ public class DrawerActivity extends BaseActivity {
         fragment.setArguments(args);
 
         FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+        fragmentManager.beginTransaction().replace(R.id.forecast_content, fragment).commit();
 
         // update selected item and title, then close the drawer
         mDrawerList.setItemChecked(position, true);

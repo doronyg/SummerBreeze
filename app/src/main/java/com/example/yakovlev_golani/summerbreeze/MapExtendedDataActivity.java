@@ -6,20 +6,27 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
-import com.example.yakovlev_golani.summerbreeze.fragments.ForecastFragment;
+import com.example.yakovlev_golani.summerbreeze.fragments.ChallengeThreeFragment;
+import com.example.yakovlev_golani.summerbreeze.fragments.HistoricalDataFragment;
 import com.example.yakovlev_golani.summerbreeze.utils.Constants;
 
 import java.util.List;
 
-public class ForecastActivity extends BaseActivity {
+/**
+ * Created by Yakovlev-Golani on 22/12/14.
+ */
+public class MapExtendedDataActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         Bundle args = new Bundle();
 
-        setContentView(R.layout.activity_challenge4_second_screen);
+        setContentView(R.layout.activity_map_extended_data);
         initLoadingSpinnerView();
+
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
 
         Intent intent = getIntent();
         if(intent != null){
@@ -32,16 +39,20 @@ public class ForecastActivity extends BaseActivity {
 
                     args.putDouble(Constants.LATITUDE, Double.parseDouble(latitude));
                     args.putDouble(Constants.LONGITUDE, Double.parseDouble(longitude));
-
                 }
             }
         }
 
-        if (savedInstanceState == null) {
-            Fragment newFragment = new ForecastFragment();
-            newFragment.setArguments(args);
-            FragmentTransaction ft = getFragmentManager().beginTransaction();
-            ft.add(R.id.content_frame, newFragment).commit();
-        }
+        Fragment challengeThreeFragment = new ChallengeThreeFragment();
+        challengeThreeFragment.setArguments(args);
+        ft.add(R.id.current_weather_content, challengeThreeFragment);
+
+        Fragment historicalDataFragment = new HistoricalDataFragment();
+        historicalDataFragment.setArguments(args);
+
+        ft.add(R.id.historical_content, historicalDataFragment);
+
+
+        ft.commit();
     }
 }

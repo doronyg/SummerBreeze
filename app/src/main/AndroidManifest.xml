@@ -23,6 +23,12 @@
 
         <activity
             android:name=".ForecastActivity"
+            android:label="@string/forecast_activity_title" >
+
+        </activity>
+
+        <activity
+            android:name=".MapExtendedDataActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
