@@ -13,8 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginRight="20dp"
         android:layout_weight="0.9"
-        android:hint="@string/location_hint"
-        android:text="Toronto" />
+        android:hint="@string/location_hint" />
 
     <Button
         android:id="@+id/ok_button"
