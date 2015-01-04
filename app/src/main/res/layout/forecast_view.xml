@@ -1,16 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<com.example.yakovlev_golani.summerbreeze.views.ForecastRecyclerView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/forecast_view"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_gravity="center"
-    android:orientation="vertical"
-    android:padding="10dp"
-    >
-
-    <com.example.yakovlev_golani.summerbreeze.views.ForecastRecyclerView
-        android:id="@+id/forecast_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"/>
-
-</FrameLayout>
+    android:layout_height="200dp"
+    android:layout_gravity="center"/>
